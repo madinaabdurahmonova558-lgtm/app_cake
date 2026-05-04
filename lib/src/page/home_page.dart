@@ -16,15 +16,15 @@ class HomePage extends StatelessWidget {
     }
 
     final data = [
-  ["Chocolate Ice Cake", "\$8.99", "assets/images/1.png"],
-  ["Creamy Birthday Cake", "\$7.99", "assets/images/7.png"],
-  ["Oreo Chocolate Cake", "\$11.99", "assets/images/5.png"],
-  ["Lava Dream Cake", "\$19.99", "assets/images/8.png"],
-  ["Wedding Cake3 Layers", "\$10.99", "assets/images/6.png"],
-  ["Fudge FantasyCake", "\$9.99", "assets/images/2.png"],
-  ["Three Milk Cake", "\$12.99", "assets/images/4.png"],
-  ["Black  forest Ice Cake", "\$13.99", "assets/images/3.png"],
-];
+      ["Chocolate Ice Cake", "\$8.99", "assets/images/1.png"],
+      ["Creamy Birthday Cake", "\$7.99", "assets/images/7.png"],
+      ["Oreo Chocolate Cake", "\$11.99", "assets/images/5.png"],
+      ["Lava Dream Cake", "\$19.99", "assets/images/8.png"],
+      ["Wedding Cake 3 Layers", "\$10.99", "assets/images/6.png"],
+      ["Fudge Fantasy Cake", "\$9.99", "assets/images/2.png"],
+      ["Three Milk Cake", "\$12.99", "assets/images/4.png"],
+      ["Black Forest Ice Cake", "\$13.99", "assets/images/3.png"],
+    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -43,6 +43,7 @@ class HomePage extends StatelessWidget {
                   children: [
                     SizedBox(height: width * 0.05),
 
+                    /// HEADER
                     ListTile(
                       leading: CircleAvatar(
                         radius: width * 0.06,
@@ -66,6 +67,7 @@ class HomePage extends StatelessWidget {
 
                     SizedBox(height: width * 0.03),
 
+                    /// SEARCH
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                       child: Row(
@@ -103,6 +105,7 @@ class HomePage extends StatelessWidget {
 
                     SizedBox(height: width * 0.05),
 
+                    /// TITLE
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: width * 0.04),
                       child: Align(
@@ -119,17 +122,19 @@ class HomePage extends StatelessWidget {
 
                     SizedBox(height: width * 0.03),
 
+                    /// 🔥 CATEGORY WITH ICONS
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _category("Cake", true, width),
-                        _category("Donuts", false, width),
-                        _category("Cookies", false, width),
+                        _category("Cake", true, width, Icons.cake),
+                        _category("Donuts", false, width, Icons.circle),
+                        _category("Cookies", false, width, Icons.cookie),
                       ],
                     ),
 
                     SizedBox(height: width * 0.05),
 
+                    /// GRID
                     Expanded(
                       child: GridView.builder(
                         padding: EdgeInsets.all(width * 0.04),
@@ -152,6 +157,7 @@ class HomePage extends StatelessWidget {
                       ),
                     ),
 
+                    /// BOTTOM NAV
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: width * 0.02),
                       child: Row(
@@ -178,28 +184,39 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  static Widget _category(String title, bool active, double width) {
+  /// CATEGORY WIDGET
+  static Widget _category(
+      String title, bool active, double width, IconData icon) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: width * 0.05,
+        horizontal: width * 0.04,
         vertical: width * 0.025,
       ),
       decoration: BoxDecoration(
         color: active ? Colors.orange : Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(30),
       ),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: width * 0.035,
-          color: active ? Colors.white : Colors.grey,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Row(
+        children: [
+          Icon(icon,
+              size: width * 0.045,
+              color: active ? Colors.white : Colors.grey),
+          SizedBox(width: width * 0.02),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: width * 0.035,
+              color: active ? Colors.white : Colors.grey,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
+/// CAKE CARD
 class _cakeCard extends StatelessWidget {
   final String title;
   final String price;
