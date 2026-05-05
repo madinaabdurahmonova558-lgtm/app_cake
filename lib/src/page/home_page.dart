@@ -13,10 +13,12 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int selectedCategory = 0;
 
+  final TextEditingController searchController = TextEditingController();
+
   final categories = ["Cake", "Donuts", "Cookies"];
   final icons = [Icons.cake, Icons.circle, Icons.cookie];
 
-  final data = [
+  final List<List<String>> data = [
     ["Chocolate Ice Cake", "\$8.99", "assets/images/1.png"],
     ["Creamy Birthday Cake", "\$7.99", "assets/images/7.png"],
     ["Oreo Chocolate Cake", "\$11.99", "assets/images/5.png"],
@@ -26,6 +28,24 @@ class _HomePageState extends State<HomePage> {
     ["Milk Cake", "\$12.99", "assets/images/4.png"],
     ["Black Forest Cake", "\$13.99", "assets/images/3.png"],
   ];
+
+  List<List<String>> filteredData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredData = data;
+  }
+
+  /// 🔍 SEARCH FUNCTION
+  void search(String value) {
+    setState(() {
+      filteredData = data
+          .where((item) =>
+              item[0].toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +65,12 @@ class _HomePageState extends State<HomePage> {
           children: [
             SizedBox(height: width * 0.05),
 
+            /// HEADER
             ListTile(
               leading: CircleAvatar(
                 radius: width * 0.06,
-                backgroundImage: const AssetImage("assets/images/9.png"),
+                backgroundImage:
+                    const AssetImage("assets/images/9.png"),
               ),
               title: Text(
                 "Hey, Jacky",
@@ -66,19 +88,23 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox(height: width * 0.03),
 
+            /// 🔍 SEARCH
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.04),
               child: Row(
                 children: [
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: width * 0.03),
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      child: const TextField(
-                        decoration: InputDecoration(
+                      child: TextField(
+                        controller: searchController,
+                        onChanged: search,
+                        decoration: const InputDecoration(
                           border: InputBorder.none,
                           icon: Icon(Icons.search),
                           hintText: "Search",
@@ -93,7 +119,8 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.tune, color: Colors.white, size: width * 0.05),
+                    child: Icon(Icons.tune,
+                        color: Colors.white, size: width * 0.05),
                   ),
                 ],
               ),
@@ -101,22 +128,7 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox(height: width * 0.05),
 
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Browse By Category",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: width * 0.045,
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(height: width * 0.03),
-
+            /// CATEGORY
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(categories.length, (index) {
@@ -127,6 +139,7 @@ class _HomePageState extends State<HomePage> {
                     setState(() {
                       selectedCategory = index;
                     });
+
                     if (index == 1) {
                       Navigator.push(
                         context,
@@ -151,14 +164,6 @@ class _HomePageState extends State<HomePage> {
                     decoration: BoxDecoration(
                       color: active ? Colors.orange : Colors.grey[200],
                       borderRadius: BorderRadius.circular(30),
-                      boxShadow: active
-                          ? [
-                              BoxShadow(
-                                color: Colors.orange.withOpacity(0.3),
-                                blurRadius: 10,
-                              )
-                            ]
-                          : [],
                     ),
                     child: Row(
                       children: [
@@ -171,7 +176,6 @@ class _HomePageState extends State<HomePage> {
                           categories[index],
                           style: TextStyle(
                             color: active ? Colors.white : Colors.grey,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -183,38 +187,29 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox(height: width * 0.05),
 
+            /// GRID
             Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.all(width * 0.04),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  crossAxisSpacing: width * 0.04,
-                  mainAxisSpacing: width * 0.04,
-                  childAspectRatio: 0.75,
-                ),
-                itemCount: data.length,
-                itemBuilder: (context, index) {
-                  return _cakeCard(
-                    data[index][0],
-                    data[index][1],
-                    data[index][2],
-                    width,
-                  );
-                },
-              ),
-            ),
-
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: width * 0.02),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Icon(Icons.home, color: Colors.orange, size: width * 0.06),
-                  Icon(Icons.store, color: Colors.grey, size: width * 0.06),
-                  Icon(Icons.favorite, color: Colors.grey, size: width * 0.06),
-                  Icon(Icons.person, color: Colors.grey, size: width * 0.06),
-                ],
-              ),
+              child: filteredData.isEmpty
+                  ? const Center(child: Text("Ничего не найдено"))
+                  : GridView.builder(
+                      padding: EdgeInsets.all(width * 0.04),
+                      gridDelegate:
+                          SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: width * 0.04,
+                        mainAxisSpacing: width * 0.04,
+                        childAspectRatio: 0.75,
+                      ),
+                      itemCount: filteredData.length,
+                      itemBuilder: (context, index) {
+                        return _cakeCard(
+                          filteredData[index][0],
+                          filteredData[index][1],
+                          filteredData[index][2],
+                          width,
+                        );
+                      },
+                    ),
             ),
           ],
         ),
@@ -223,6 +218,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+/// CARD
 class _cakeCard extends StatelessWidget {
   final String title;
   final String price;
@@ -264,21 +260,12 @@ class _cakeCard extends StatelessWidget {
             SizedBox(height: width * 0.02),
             Text(title,
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: width * 0.035)),
+                    fontWeight: FontWeight.bold,
+                    fontSize: width * 0.035)),
             Text(price,
                 style: TextStyle(
-                    color: Colors.orange, fontSize: width * 0.035)),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                padding: EdgeInsets.all(width * 0.015),
-                decoration: const BoxDecoration(
-                  color: Colors.orange,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.add, color: Colors.white, size: width * 0.04),
-              ),
-            ),
+                    color: Colors.orange,
+                    fontSize: width * 0.035)),
           ],
         ),
       ),
