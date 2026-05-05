@@ -1,11 +1,15 @@
-
-import 'package:app_cake/src/screen/detail_screen.dart';
-import 'package:app_cake/src/widgets/items.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:provider/provider.dart';
+import 'src/screen/png_screen.dart';
+import 'src/widgets/cart_provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => CartProvider(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,13 +17,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveSizer(
-      builder: (context, orientation, screenType) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: DetailScreen(item: items[0], index: 0),
-        );
-      },
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: PngScreen(),
     );
   }
 }
