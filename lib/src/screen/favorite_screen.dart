@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../widgets/cart_provider.dart';
 import '../widgets/custom_tab_bar.dart';
 
@@ -13,7 +14,7 @@ class FavoriteScreen extends StatelessWidget {
     final provider = context.watch<CartProvider>();
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey[200],
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.all(12),
@@ -33,11 +34,8 @@ class FavoriteScreen extends StatelessWidget {
 
               const SizedBox(height: 15),
 
-              /// TAB (НЕ ТРОГАЕМ)
-              CustomTabBar(
-                selectedIndex: 0,
-                onTap: onTabChange,
-              ),
+              /// TAB — Saved Items активен (индекс 0)
+              CustomTabBar(selectedIndex: 0, onTap: onTabChange),
 
               const SizedBox(height: 15),
 

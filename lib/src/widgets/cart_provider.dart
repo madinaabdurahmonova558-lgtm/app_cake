@@ -21,4 +21,6 @@ class CartProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  bool isFavorite(Item item) => _favorites.contains(item);
 }

@@ -14,19 +14,18 @@ class _PngScreenState extends State<PngScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screens = [
-      CartScreen(
-        onTabChange: (i) {
-          if (i == 1) setState(() => index = 1);
-        },
-      ),
-      FavoriteScreen(
-        onTabChange: (i) {
-          if (i == 0) setState(() => index = 0);
-        },
-      ),
-    ];
-
-    return Scaffold(body: screens[index]);
+    return Scaffold(
+      body: index == 0
+          ? FavoriteScreen(
+              onTabChange: (i) {
+                setState(() => index = i);
+              },
+            )
+          : CartScreen(
+              onTabChange: (i) {
+                setState(() => index = i);
+              },
+            ),
+    );
   }
 }

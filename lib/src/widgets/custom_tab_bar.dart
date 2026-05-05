@@ -13,32 +13,32 @@ class CustomTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(4),
+      height: 55,
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Colors.grey.shade300,
-        borderRadius: BorderRadius.circular(25),
+        color: const Color(0xFFE5E5E5),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
         children: [
-          /// TAB 1
+          /// LEFT TAB (Saved Items)
           Expanded(
             child: GestureDetector(
               onTap: () => onTap(0),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
                   color: selectedIndex == 0
                       ? Colors.orange
                       : Colors.transparent,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(25),
                 ),
                 child: Center(
                   child: Text(
-                    "Show All",
+                    "Saved Items",
                     style: TextStyle(
-                      color: selectedIndex == 0
-                          ? Colors.white
-                          : Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: selectedIndex == 0 ? Colors.white : Colors.black,
                     ),
                   ),
                 ),
@@ -46,25 +46,24 @@ class CustomTabBar extends StatelessWidget {
             ),
           ),
 
-          /// TAB 2
+          /// RIGHT TAB (Add to Cart)
           Expanded(
             child: GestureDetector(
               onTap: () => onTap(1),
               child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 14),
                 decoration: BoxDecoration(
                   color: selectedIndex == 1
                       ? Colors.orange
                       : Colors.transparent,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(25),
                 ),
                 child: Center(
                   child: Text(
                     "Add to Cart",
                     style: TextStyle(
-                      color: selectedIndex == 1
-                          ? Colors.white
-                          : Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: selectedIndex == 1 ? Colors.white : Colors.black,
                     ),
                   ),
                 ),
