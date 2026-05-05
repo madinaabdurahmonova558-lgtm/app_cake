@@ -7,7 +7,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ProfileProvider(), // 🔥 MUHIM
+      create: (_) => ProfileProvider(), 
       child: const MyApp(),
     ),
   );
