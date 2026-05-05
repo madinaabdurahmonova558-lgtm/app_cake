@@ -7,7 +7,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ProfileProvider(), 
+      create: (_) => ProfileProvider(),
       child: const MyApp(),
     ),
   );
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, screenType) {
         return const MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: AccountScreen(),
+          home: AccountScreen(), // 🔥 endi topadi
         );
       },
     );

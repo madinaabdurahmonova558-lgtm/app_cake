@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DonutDetailScreen extends StatefulWidget {
-
   final String image;
   final String title;
   final String price;
@@ -23,11 +22,10 @@ class _DonutDetailScreenState extends State<DonutDetailScreen> {
   bool isFavorite = false;
   int rating = 4;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Color(0xfffffffff),
       body: Column(
         children: [
           /// 🔴 HEADER
@@ -51,7 +49,6 @@ class _DonutDetailScreenState extends State<DonutDetailScreen> {
                         child: Icon(Icons.arrow_back, size: 18.sp),
                       ),
                     ),
-
 
                     /// ❤️ FAVORITE
                     GestureDetector(
