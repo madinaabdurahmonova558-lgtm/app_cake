@@ -6,31 +6,58 @@ class DonutsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = [
-      ["Strawberry Donut", "\$3.99", "assets/images/3.png"],
-      ["Chocolate Donut", "\$4.99", "assets/images/5.png"],
-    ];
+    // 👉 ПУСТОЙ СПИСОК (без ошибки)
+    final List<List<String>> data = [];
 
     return Scaffold(
       appBar: AppBar(title: const Text("Donuts")),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(16),
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemCount: data.length,
-        itemBuilder: (_, i) {
-          return _card(data[i][0], data[i][1], data[i][2]);
-        },
-      ),
+
+      /// 🔥 ГЛАВНАЯ ЗАЩИТА
+      body: data.isEmpty
+          ? const Center(
+              child: Text(
+                "",
+                style: TextStyle(fontSize: 18),
+              ),
+            )
+
+          /// ЕСЛИ ЕСТЬ ДАННЫЕ
+          : GridView.builder(
+              padding: const EdgeInsets.all(16),
+              gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
+                childAspectRatio: 0.75,
+              ),
+              itemCount: data.length,
+              itemBuilder: (context, i) {
+                final item = data[i];
+
+                /// 🔥 ДОП. ЗАЩИТА
+                if (item.length < 3) {
+                  return const SizedBox();
+                }
+
+                return _DonutCard(
+                  item[0],
+                  item[1],
+                  item[2],
+                );
+              },
+            ),
     );
   }
 }
 
-class _card extends StatelessWidget {
-  final String title, price, image;
-  const _card(this.title, this.price, this.image);
+/// 🔥 КАРТОЧКА
+class _DonutCard extends StatelessWidget {
+  final String title;
+  final String price;
+  final String image;
+
+  const _DonutCard(this.title, this.price, this.image);
 
   @override
   Widget build(BuildContext context) {
@@ -44,12 +71,26 @@ class _card extends StatelessWidget {
           ),
         );
       },
-      child: Column(
-        children: [
-          Expanded(child: Image.asset(image)),
-          Text(title),
-          Text(price),
-        ],
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          children: [
+            Expanded(child: Image.asset(image)),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(
+              price,
+              style: const TextStyle(color: Colors.orange),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'detail_page.dart';
+import 'donuts_page.dart';
+import 'cookies_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,12 +45,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             SizedBox(height: width * 0.05),
 
-            /// 🔥 HEADER С НОВОЙ АВАТАРКОЙ
             ListTile(
               leading: CircleAvatar(
                 radius: width * 0.06,
-                backgroundImage:
-                    const AssetImage("assets/images/9.png"),
+                backgroundImage: const AssetImage("assets/images/9.png"),
               ),
               title: Text(
                 "Hey, Jacky",
@@ -66,15 +66,13 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox(height: width * 0.03),
 
-            /// SEARCH
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.04),
               child: Row(
                 children: [
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: width * 0.03),
+                      padding: EdgeInsets.symmetric(horizontal: width * 0.03),
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(30),
@@ -95,8 +93,7 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.tune,
-                        color: Colors.white, size: width * 0.05),
+                    child: Icon(Icons.tune, color: Colors.white, size: width * 0.05),
                   ),
                 ],
               ),
@@ -104,7 +101,6 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox(height: width * 0.05),
 
-            /// TITLE
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.04),
               child: Align(
@@ -121,7 +117,6 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox(height: width * 0.03),
 
-            /// 🔥 КАТЕГОРИИ (РАБОТАЮТ)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(categories.length, (index) {
@@ -132,6 +127,21 @@ class _HomePageState extends State<HomePage> {
                     setState(() {
                       selectedCategory = index;
                     });
+                    if (index == 1) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const DonutsPage(),
+                        ),
+                      );
+                    } else if (index == 2) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CookiesPage(),
+                        ),
+                      );
+                    }
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(
@@ -160,8 +170,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           categories[index],
                           style: TextStyle(
-                            color:
-                                active ? Colors.white : Colors.grey,
+                            color: active ? Colors.white : Colors.grey,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -174,12 +183,10 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox(height: width * 0.05),
 
-            /// GRID
             Expanded(
               child: GridView.builder(
                 padding: EdgeInsets.all(width * 0.04),
-                gridDelegate:
-                    SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: width * 0.04,
                   mainAxisSpacing: width * 0.04,
@@ -197,23 +204,18 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            /// BOTTOM NAV
             Padding(
               padding: EdgeInsets.symmetric(vertical: width * 0.02),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Icon(Icons.home,
-                      color: Colors.orange, size: width * 0.06),
-                  Icon(Icons.store,
-                      color: Colors.grey, size: width * 0.06),
-                  Icon(Icons.favorite,
-                      color: Colors.grey, size: width * 0.06),
-                  Icon(Icons.person,
-                      color: Colors.grey, size: width * 0.06),
+                  Icon(Icons.home, color: Colors.orange, size: width * 0.06),
+                  Icon(Icons.store, color: Colors.grey, size: width * 0.06),
+                  Icon(Icons.favorite, color: Colors.grey, size: width * 0.06),
+                  Icon(Icons.person, color: Colors.grey, size: width * 0.06),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -221,7 +223,6 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-/// CARD
 class _cakeCard extends StatelessWidget {
   final String title;
   final String price;
@@ -263,8 +264,7 @@ class _cakeCard extends StatelessWidget {
             SizedBox(height: width * 0.02),
             Text(title,
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: width * 0.035)),
+                    fontWeight: FontWeight.bold, fontSize: width * 0.035)),
             Text(price,
                 style: TextStyle(
                     color: Colors.orange, fontSize: width * 0.035)),
@@ -276,10 +276,9 @@ class _cakeCard extends StatelessWidget {
                   color: Colors.orange,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.add,
-                    color: Colors.white, size: width * 0.04),
+                child: Icon(Icons.add, color: Colors.white, size: width * 0.04),
               ),
-            )
+            ),
           ],
         ),
       ),
