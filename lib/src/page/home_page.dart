@@ -1,175 +1,204 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'detail_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  int selectedCategory = 0;
+
+  final TextEditingController searchController = TextEditingController();
+
+  final categories = ["Cake", "Donuts", "Cookies"];
+  final icons = [Icons.cake, Icons.circle, Icons.cookie];
+
+  List<List<String>> cakes = [
+    ["Chocolate Ice Cake", "\$8.99", "assets/images/1.png"],
+    ["Creamy Birthday Cake", "\$7.99", "assets/images/7.png"],
+    ["Oreo Chocolate Cake", "\$11.99", "assets/images/5.png"],
+    ["Lava Dream Cake", "\$19.99", "assets/images/8.png"],
+    ["Wedding Cake", "\$10.99", "assets/images/6.png"],
+    ["Fudge Cake", "\$9.99", "assets/images/2.png"],
+    ["Milk Cake", "\$12.99", "assets/images/4.png"],
+    ["Black Forest Cake", "\$13.99", "assets/images/3.png"],
+  ];
+
+  List<List<String>> donuts = [];
+  List<List<String>> cookies = [];
+
+  List<List<String>> filtered = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filtered = cakes;
+  }
+
+  void search(String value) {
+    final current = _getCurrentList();
+
+    setState(() {
+      filtered = current
+          .where((item) =>
+              item[0].toLowerCase().contains(value.toLowerCase()))
+          .toList();
+    });
+  }
+
+  List<List<String>> _getCurrentList() {
+    if (selectedCategory == 0) return cakes;
+    if (selectedCategory == 1) return donuts;
+    return cookies;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
-    int crossAxisCount = 2;
-    if (width > 900) {
-      crossAxisCount = 4;
-    } else if (width > 600) {
-      crossAxisCount = 3;
-    }
-
-    final data = [
-  ["Chocolate Ice Cake", "\$8.99", "assets/images/1.png"],
-  ["Creamy Birthday Cake", "\$7.99", "assets/images/7.png"],
-  ["Oreo Chocolate Cake", "\$11.99", "assets/images/5.png"],
-  ["Lava Dream Cake", "\$19.99", "assets/images/8.png"],
-  ["Wedding Cake3 Layers", "\$10.99", "assets/images/6.png"],
-  ["Fudge FantasyCake", "\$9.99", "assets/images/2.png"],
-  ["Three Milk Cake", "\$12.99", "assets/images/4.png"],
-  ["Black  forest Ice Cake", "\$13.99", "assets/images/3.png"],
-];
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(30),
-                  ),
+            SizedBox(height: 3.h),
+
+            /// HEADER
+            ListTile(
+              leading: CircleAvatar(
+                radius: 6.w,
+                backgroundImage:
+                    const AssetImage("assets/images/9.png"),
+              ),
+              title: Text(
+                "Hey, Jacky",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18.sp,
                 ),
-                child: Column(
-                  children: [
-                    SizedBox(height: width * 0.05),
+              ),
+              subtitle: Text(
+                "Find and Get Your Favorite Cake",
+                style: TextStyle(fontSize: 15.sp),
+              ),
+              trailing: Icon(Icons.menu, size: 6.w),
+            ),
 
-                    ListTile(
-                      leading: CircleAvatar(
-                        radius: width * 0.06,
-                        backgroundImage: const NetworkImage(
-                          "https://i.pravatar.cc/150?img=3",
-                        ),
+            /// 🔍 SEARCH + FILTER ICON
+            Padding(
+              padding: EdgeInsets.all(3.w),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 3.w),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(30),
                       ),
-                      title: Text(
-                        "Hey, Jacky",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: width * 0.045,
-                        ),
-                      ),
-                      subtitle: Text(
-                        "Find and Get Your Favorite Cake",
-                        style: TextStyle(fontSize: width * 0.035),
-                      ),
-                      trailing: Icon(Icons.menu, size: width * 0.06),
-                    ),
-
-                    SizedBox(height: width * 0.03),
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: width * 0.03),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[300],
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              child: const TextField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  icon: Icon(Icons.search),
-                                  hintText: "Search",
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: width * 0.03),
-                          Container(
-                            padding: EdgeInsets.all(width * 0.03),
-                            decoration: const BoxDecoration(
-                              color: Colors.orange,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(Icons.tune,
-                                color: Colors.white, size: width * 0.05),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: width * 0.05),
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: width * 0.04),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Browse By Category",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: width * 0.045,
-                          ),
+                      child: TextField(
+                        controller: searchController,
+                        onChanged: search,
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          icon: Icon(Icons.search),
+                          hintText: "Search",
                         ),
                       ),
                     ),
+                  ),
 
-                    SizedBox(height: width * 0.03),
+                  SizedBox(width: 3.w),
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  /// 🔥 КНОПКА КАК НА СКРИНЕ
+                  Container(
+                    padding: EdgeInsets.all(3.w),
+                    decoration: const BoxDecoration(
+                      color: Colors.orange,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.tune,
+                      color: Colors.white,
+                      size: 5.w,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            /// CATEGORY
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: List.generate(categories.length, (index) {
+                final active = selectedCategory == index;
+
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = index;
+                      filtered = _getCurrentList();
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 5.w, vertical: 1.5.h),
+                    decoration: BoxDecoration(
+                      color: active
+                          ? Colors.orange
+                          : Colors.grey[200],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
                       children: [
-                        _category("Cake", true, width),
-                        _category("Donuts", false, width),
-                        _category("Cookies", false, width),
+                        Icon(
+                          icons[index],
+                          color:
+                              active ? Colors.white : Colors.grey,
+                          size: 5.w,
+                        ),
+                        SizedBox(width: 2.w),
+                        Text(
+                          categories[index],
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            color: active
+                                ? Colors.white
+                                : Colors.grey,
+                          ),
+                        ),
                       ],
                     ),
+                  ),
+                );
+              }),
+            ),
 
-                    SizedBox(height: width * 0.05),
+            SizedBox(height: 2.h),
 
-                    Expanded(
-                      child: GridView.builder(
-                        padding: EdgeInsets.all(width * 0.04),
-                        gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          crossAxisSpacing: width * 0.04,
-                          mainAxisSpacing: width * 0.04,
-                          childAspectRatio: 0.75,
-                        ),
-                        itemCount: data.length,
-                        itemBuilder: (context, index) {
-                          return _cakeCard(
-                            data[index][0],
-                            data[index][1],
-                            data[index][2],
-                            width,
-                          );
-                        },
-                      ),
-                    ),
-
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: width * 0.02),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Icon(Icons.home,
-                              color: Colors.orange, size: width * 0.06),
-                          Icon(Icons.store,
-                              color: Colors.grey, size: width * 0.06),
-                          Icon(Icons.favorite,
-                              color: Colors.grey, size: width * 0.06),
-                          Icon(Icons.person,
-                              color: Colors.grey, size: width * 0.06),
-                        ],
-                      ),
-                    )
-                  ],
+            /// GRID
+            Expanded(
+              child: GridView.builder(
+                padding: EdgeInsets.all(3.w),
+                gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:
+                      Device.screenType == ScreenType.tablet ? 4 : 2,
+                  crossAxisSpacing: 3.w,
+                  mainAxisSpacing: 3.w,
+                  childAspectRatio: 0.8,
                 ),
+                itemCount: filtered.length,
+                itemBuilder: (_, i) {
+                  return _card(
+                    filtered[i][0],
+                    filtered[i][1],
+                    filtered[i][2],
+                  );
+                },
               ),
             ),
           ],
@@ -177,36 +206,13 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
-
-  static Widget _category(String title, bool active, double width) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: width * 0.05,
-        vertical: width * 0.025,
-      ),
-      decoration: BoxDecoration(
-        color: active ? Colors.orange : Colors.grey[200],
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: width * 0.035,
-          color: active ? Colors.white : Colors.grey,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
 }
 
-class _cakeCard extends StatelessWidget {
-  final String title;
-  final String price;
-  final String image;
-  final double width;
+/// CARD
+class _card extends StatelessWidget {
+  final String title, price, image;
 
-  const _cakeCard(this.title, this.price, this.image, this.width);
+  const _card(this.title, this.price, this.image);
 
   @override
   Widget build(BuildContext context) {
@@ -215,49 +221,27 @@ class _cakeCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => DetailPage(
-              title: title,
-              price: price,
-              image: image,
-            ),
+            builder: (_) =>
+                DetailPage(title: title, price: price, image: image),
           ),
         );
       },
       child: Container(
-        padding: EdgeInsets.all(width * 0.02),
+        padding: EdgeInsets.all(2.w),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.asset(image, fit: BoxFit.cover),
-              ),
-            ),
-            SizedBox(height: width * 0.02),
+            Expanded(child: Image.asset(image)),
             Text(title,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: width * 0.035)),
+                    fontSize: 14.sp)),
             Text(price,
                 style: TextStyle(
-                    color: Colors.orange, fontSize: width * 0.035)),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Container(
-                padding: EdgeInsets.all(width * 0.015),
-                decoration: const BoxDecoration(
-                  color: Colors.orange,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.add,
-                    color: Colors.white, size: width * 0.04),
-              ),
-            )
+                    color: Colors.orange, fontSize: 13.sp)),
           ],
         ),
       ),
