@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import 'detail_page.dart';
-import 'donuts_page.dart';
-import 'cookies_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   final categories = ["Cake", "Donuts", "Cookies"];
   final icons = [Icons.cake, Icons.circle, Icons.cookie];
 
-  final List<List<String>> data = [
+  List<List<String>> cakes = [
     ["Chocolate Ice Cake", "\$8.99", "assets/images/1.png"],
     ["Creamy Birthday Cake", "\$7.99", "assets/images/7.png"],
     ["Oreo Chocolate Cake", "\$11.99", "assets/images/5.png"],
@@ -29,46 +28,47 @@ class _HomePageState extends State<HomePage> {
     ["Black Forest Cake", "\$13.99", "assets/images/3.png"],
   ];
 
-  List<List<String>> filteredData = [];
+  List<List<String>> donuts = [];
+  List<List<String>> cookies = [];
+
+  List<List<String>> filtered = [];
 
   @override
   void initState() {
     super.initState();
-    filteredData = data;
+    filtered = cakes;
   }
 
-  /// 🔍 SEARCH FUNCTION
   void search(String value) {
+    final current = _getCurrentList();
+
     setState(() {
-      filteredData = data
+      filtered = current
           .where((item) =>
               item[0].toLowerCase().contains(value.toLowerCase()))
           .toList();
     });
   }
 
+  List<List<String>> _getCurrentList() {
+    if (selectedCategory == 0) return cakes;
+    if (selectedCategory == 1) return donuts;
+    return cookies;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-
-    int crossAxisCount = 2;
-    if (width > 900) {
-      crossAxisCount = 4;
-    } else if (width > 600) {
-      crossAxisCount = 3;
-    }
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
-            SizedBox(height: width * 0.05),
+            SizedBox(height: 3.h),
 
             /// HEADER
             ListTile(
               leading: CircleAvatar(
-                radius: width * 0.06,
+                radius: 6.w,
                 backgroundImage:
                     const AssetImage("assets/images/9.png"),
               ),
@@ -76,27 +76,25 @@ class _HomePageState extends State<HomePage> {
                 "Hey, Jacky",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: width * 0.045,
+                  fontSize: 18.sp,
                 ),
               ),
               subtitle: Text(
                 "Find and Get Your Favorite Cake",
-                style: TextStyle(fontSize: width * 0.035),
+                style: TextStyle(fontSize: 15.sp),
               ),
-              trailing: Icon(Icons.menu, size: width * 0.06),
+              trailing: Icon(Icons.menu, size: 6.w),
             ),
 
-            SizedBox(height: width * 0.03),
-
-            /// 🔍 SEARCH
+            /// 🔍 SEARCH + FILTER ICON
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.04),
+              padding: EdgeInsets.all(3.w),
               child: Row(
                 children: [
                   Expanded(
                     child: Container(
                       padding:
-                          EdgeInsets.symmetric(horizontal: width * 0.03),
+                          EdgeInsets.symmetric(horizontal: 3.w),
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(30),
@@ -112,21 +110,25 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(width: width * 0.03),
+
+                  SizedBox(width: 3.w),
+
+                  /// 🔥 КНОПКА КАК НА СКРИНЕ
                   Container(
-                    padding: EdgeInsets.all(width * 0.03),
+                    padding: EdgeInsets.all(3.w),
                     decoration: const BoxDecoration(
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(Icons.tune,
-                        color: Colors.white, size: width * 0.05),
+                    child: Icon(
+                      Icons.tune,
+                      color: Colors.white,
+                      size: 5.w,
+                    ),
                   ),
                 ],
               ),
             ),
-
-            SizedBox(height: width * 0.05),
 
             /// CATEGORY
             Row(
@@ -138,44 +140,34 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     setState(() {
                       selectedCategory = index;
+                      filtered = _getCurrentList();
                     });
-
-                    if (index == 1) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const DonutsPage(),
-                        ),
-                      );
-                    } else if (index == 2) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const CookiesPage(),
-                        ),
-                      );
-                    }
                   },
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: width * 0.05,
-                      vertical: width * 0.025,
-                    ),
+                        horizontal: 5.w, vertical: 1.5.h),
                     decoration: BoxDecoration(
-                      color: active ? Colors.orange : Colors.grey[200],
+                      color: active
+                          ? Colors.orange
+                          : Colors.grey[200],
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
                       children: [
                         Icon(
                           icons[index],
-                          color: active ? Colors.white : Colors.grey,
+                          color:
+                              active ? Colors.white : Colors.grey,
+                          size: 5.w,
                         ),
-                        SizedBox(width: width * 0.02),
+                        SizedBox(width: 2.w),
                         Text(
                           categories[index],
                           style: TextStyle(
-                            color: active ? Colors.white : Colors.grey,
+                            fontSize: 15.sp,
+                            color: active
+                                ? Colors.white
+                                : Colors.grey,
                           ),
                         ),
                       ],
@@ -185,31 +177,29 @@ class _HomePageState extends State<HomePage> {
               }),
             ),
 
-            SizedBox(height: width * 0.05),
+            SizedBox(height: 2.h),
 
             /// GRID
             Expanded(
-              child: filteredData.isEmpty
-                  ? const Center(child: Text("Ничего не найдено"))
-                  : GridView.builder(
-                      padding: EdgeInsets.all(width * 0.04),
-                      gridDelegate:
-                          SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: crossAxisCount,
-                        crossAxisSpacing: width * 0.04,
-                        mainAxisSpacing: width * 0.04,
-                        childAspectRatio: 0.75,
-                      ),
-                      itemCount: filteredData.length,
-                      itemBuilder: (context, index) {
-                        return _cakeCard(
-                          filteredData[index][0],
-                          filteredData[index][1],
-                          filteredData[index][2],
-                          width,
-                        );
-                      },
-                    ),
+              child: GridView.builder(
+                padding: EdgeInsets.all(3.w),
+                gridDelegate:
+                    SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount:
+                      Device.screenType == ScreenType.tablet ? 4 : 2,
+                  crossAxisSpacing: 3.w,
+                  mainAxisSpacing: 3.w,
+                  childAspectRatio: 0.8,
+                ),
+                itemCount: filtered.length,
+                itemBuilder: (_, i) {
+                  return _card(
+                    filtered[i][0],
+                    filtered[i][1],
+                    filtered[i][2],
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -219,13 +209,10 @@ class _HomePageState extends State<HomePage> {
 }
 
 /// CARD
-class _cakeCard extends StatelessWidget {
-  final String title;
-  final String price;
-  final String image;
-  final double width;
+class _card extends StatelessWidget {
+  final String title, price, image;
 
-  const _cakeCard(this.title, this.price, this.image, this.width);
+  const _card(this.title, this.price, this.image);
 
   @override
   Widget build(BuildContext context) {
@@ -234,38 +221,27 @@ class _cakeCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (_) => DetailPage(
-              title: title,
-              price: price,
-              image: image,
-            ),
+            builder: (_) =>
+                DetailPage(title: title, price: price, image: image),
           ),
         );
       },
       child: Container(
-        padding: EdgeInsets.all(width * 0.02),
+        padding: EdgeInsets.all(2.w),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(15),
-                child: Image.asset(image, fit: BoxFit.cover),
-              ),
-            ),
-            SizedBox(height: width * 0.02),
+            Expanded(child: Image.asset(image)),
             Text(title,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: width * 0.035)),
+                    fontSize: 14.sp)),
             Text(price,
                 style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: width * 0.035)),
+                    color: Colors.orange, fontSize: 13.sp)),
           ],
         ),
       ),
