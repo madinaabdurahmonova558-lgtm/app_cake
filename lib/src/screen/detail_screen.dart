@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DetailScreen extends StatefulWidget {
-  final ItemModel item;
-  final int index;
 
-  const DetailScreen({super.key, required this.item, required this.index});
+  final ItemModel? item;
+  final int? index;
+
+  const DetailScreen({super.key, this.item, this.index});
+
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -20,7 +22,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final item = widget.item;
+    final item = widget.item!;
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
@@ -34,7 +36,7 @@ class _DetailScreenState extends State<DetailScreen> {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 4.w),
+            padding: const EdgeInsets.only(right: 16),
             child: GestureDetector(
               onTap: () {
                 setState(() {
@@ -51,7 +53,7 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
 
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5.w),
+        padding: EdgeInsets.symmetric(horizontal: 5.sp),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -121,7 +123,7 @@ class _DetailScreenState extends State<DetailScreen> {
                             shape: BoxShape.circle,
                           ),
                           child: Padding(
-                            padding: EdgeInsets.all(4),
+                            padding: const EdgeInsets.all(4),
                             child: Icon(
                               Icons.add,
                               color: Colors.white,
@@ -178,13 +180,14 @@ class _DetailScreenState extends State<DetailScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      if (widget.index < 3) {
+                      /// Переходим на следующий товар если он есть
+                      if (widget.index! < items.length - 1) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (_) => DetailScreen(
-                              item: items[widget.index + 1],
-                              index: widget.index + 1,
+                              item: items[widget.index! + 1],
+                              index: widget.index! + 1,
                             ),
                           ),
                         );
@@ -198,7 +201,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                       child: Center(
                         child: Text(
-                          widget.index < 3 ? "Add to Cart" : "Add to Cart",
+                          "Add to Cart",
                           style: TextStyle(
                             fontSize: 15.sp,
                             color: Colors.white,
