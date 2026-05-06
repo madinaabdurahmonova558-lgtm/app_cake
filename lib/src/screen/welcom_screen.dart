@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class WelcomScreen extends StatelessWidget {
-  const WelcomScreen({super.key});
+   WelcomScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +13,7 @@ class WelcomScreen extends StatelessWidget {
           Container(
             height: 100.h,
             width: 100.w,
-            decoration: BoxDecoration(
+            decoration:  BoxDecoration(
               color: Colors.amber,
               image: DecorationImage(
                 image: AssetImage('assets/images/hs.png'),
@@ -25,16 +26,19 @@ class WelcomScreen extends StatelessWidget {
                 Center(
                   child: Text(
                     'CakeCrave',
-                    style: TextStyle(fontSize: 35, fontWeight: FontWeight.w900),
+                    style: TextStyle(
+                      fontSize: 35.sp,
+                    
+                    ),
                   ),
                 ),
                 SizedBox(height: 5.h),
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.only(right: 70, left: 70),
+                    padding: EdgeInsets.symmetric(horizontal: 18.w),
                     child: Text(
                       'Discover a world of delicious cakes, from classic flavors to innovative creations, all in one app.',
-                      style: TextStyle(fontSize: 13, color: Colors.black),
+                      style: TextStyle(fontSize: 13.sp, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -43,30 +47,29 @@ class WelcomScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () => Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HomePage()),
+                    MaterialPageRoute(builder: (context) =>  HomePage()),
                   ),
                   child: Container(
-                    height: 45,
-                    width: 200,
+                    height: 5.5.h,
+                    width: 50.w,
                     decoration: BoxDecoration(
                       color: Colors.orange,
                       borderRadius: BorderRadius.circular(25),
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(width: 5.w),
-                        Center(
-                          child: Text(
-                            'Get Started Now',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                            ),
+                        SizedBox(width: 3.w),
+                        Text(
+                          'Get Started Now',
+                          style: TextStyle(
+                            fontSize: 15.sp,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
                           ),
                         ),
                         SizedBox(width: 3.w),
-                        Icon(Icons.arrow_forward, color: Colors.white),
+                         Icon(Icons.arrow_forward, color: Colors.white),
                       ],
                     ),
                   ),

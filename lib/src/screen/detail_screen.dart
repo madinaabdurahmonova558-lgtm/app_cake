@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class DetailScreen extends StatefulWidget {
-
   final ItemModel? item;
   final int? index;
 
   const DetailScreen({super.key, this.item, this.index});
-
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -53,7 +51,7 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
 
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 5.sp),
+        padding: EdgeInsets.symmetric(horizontal: 5.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../widgets/cart_provider.dart';
 import '../widgets/custom_tab_bar.dart';
@@ -45,53 +46,53 @@ class _CartScreenState extends State<CartScreen> {
       backgroundColor: Colors.grey[200],
       body: SafeArea(
         child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+          margin: EdgeInsets.symmetric(horizontal: 3.w, vertical: 2.h),
+          padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(30),
           ),
           child: Column(
             children: [
-              const SizedBox(height: 10),
+              SizedBox(height: 1.h),
 
-              const Text(
+              Text(
                 "MY CART",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
               ),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 2.h),
 
+              /// TAB — Add to Cart активен (индекс 1)
               CustomTabBar(selectedIndex: 1, onTap: widget.onTabChange),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 2.h),
 
               Expanded(
                 child: items.isEmpty
-                    ? const Center(
+                    ? Center(
                         child: Text(
                           "Корзина пуста",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey,
-                          ),
+                          style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                         ),
                       )
                     : GridView.builder(
-                        padding: const EdgeInsets.only(bottom: 20),
+                        padding: EdgeInsets.only(bottom: 2.h),
                         itemCount: items.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          mainAxisExtent: 210,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 12,
+                          mainAxisExtent: 26.h,
+                          crossAxisSpacing: 2.w,
+                          mainAxisSpacing: 1.5.h,
                         ),
                         itemBuilder: (_, i) {
                           final item = items[i];
 
                           return Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: EdgeInsets.all(2.w),
                             decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(20),
@@ -99,7 +100,7 @@ class _CartScreenState extends State<CartScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Image.asset(item.image, height: 80),
+                                Image.asset(item.image, height: 10.h),
 
                                 Flexible(
                                   child: Text(
@@ -107,35 +108,38 @@ class _CartScreenState extends State<CartScreen> {
                                     textAlign: TextAlign.center,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 13.sp),
                                   ),
                                 ),
 
                                 Text(
                                   "\$${item.price}",
-                                  style: const TextStyle(color: Colors.orange),
+                                  style: TextStyle(
+                                    color: Colors.orange,
+                                    fontSize: 13.sp,
+                                  ),
                                 ),
 
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    /// МИНУС — удаляет товар из списка
+                                    /// МИНУС — удаляет товар
                                     IconButton(
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.remove_circle,
                                         color: Colors.orange,
+                                        size: 18.sp,
                                       ),
                                       onPressed: () => removeItem(item),
                                     ),
-
                                     /// ПЛЮС — добавляет в избранное
                                     IconButton(
-                                      icon: const Icon(
+                                      icon: Icon(
                                         Icons.add_circle,
                                         color: Colors.orange,
+                                        size: 18.sp,
                                       ),
-                                      onPressed: () =>
-                                          provider.toggleFavorite(item),
+                                      onPressed: () => provider.toggleFavorite(item),
                                     ),
                                   ],
                                 ),

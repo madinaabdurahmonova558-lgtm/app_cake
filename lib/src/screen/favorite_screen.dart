@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../widgets/cart_provider.dart';
 import '../widgets/custom_tab_bar.dart';
@@ -17,27 +18,30 @@ class FavoriteScreen extends StatelessWidget {
       backgroundColor: Colors.grey[200],
       body: SafeArea(
         child: Container(
-          margin: const EdgeInsets.all(12),
-          padding: const EdgeInsets.all(16),
+          margin: EdgeInsets.all(3.w),
+          padding: EdgeInsets.all(4.w),
           decoration: BoxDecoration(
             color: Colors.grey[200],
             borderRadius: BorderRadius.circular(30),
           ),
           child: Column(
             children: [
-              const SizedBox(height: 10),
+              SizedBox(height: 1.h),
 
-              const Text(
+              Text(
                 "MY FAVORITES",
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
+                ),
               ),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 2.h),
 
               /// TAB — Saved Items активен (индекс 0)
               CustomTabBar(selectedIndex: 0, onTap: onTabChange),
 
-              const SizedBox(height: 15),
+              SizedBox(height: 2.h),
 
               Expanded(
                 child: ListView.builder(
@@ -46,18 +50,23 @@ class FavoriteScreen extends StatelessWidget {
                     final item = provider.favorites[i];
 
                     return Container(
-                      margin: const EdgeInsets.only(bottom: 10),
-                      padding: const EdgeInsets.all(12),
+                      margin: EdgeInsets.only(bottom: 1.h),
+                      padding: EdgeInsets.all(3.w),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
                       ),
                       child: Row(
                         children: [
-                          Image.asset(item.image, height: 45),
-                          const SizedBox(width: 12),
-                          Expanded(child: Text(item.name)),
-                          const Icon(Icons.bookmark, color: Colors.orange),
+                          Image.asset(item.image, height: 6.h),
+                          SizedBox(width: 3.w),
+                          Expanded(
+                            child: Text(
+                              item.name,
+                              style: TextStyle(fontSize: 14.sp),
+                            ),
+                          ),
+                          Icon(Icons.bookmark, color: Colors.orange, size: 18.sp),
                         ],
                       ),
                     );
