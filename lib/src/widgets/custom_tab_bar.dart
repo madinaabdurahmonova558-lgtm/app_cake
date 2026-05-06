@@ -22,7 +22,6 @@ class CustomTabBar extends StatelessWidget {
       ),
       child: Row(
         children: [
-          /// LEFT TAB (Saved Items)
           Expanded(
             child: GestureDetector(
               onTap: () => onTap(0),
@@ -44,8 +43,6 @@ class CustomTabBar extends StatelessWidget {
               ),
             ),
           ),
-
-          /// RIGHT TAB (Add to Cart)
           Expanded(
             child: GestureDetector(
               onTap: () => onTap(1),

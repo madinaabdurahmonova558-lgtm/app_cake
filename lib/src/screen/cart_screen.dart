@@ -65,8 +65,6 @@ class _CartScreenState extends State<CartScreen> {
               ),
 
               SizedBox(height: 2.h),
-
-              /// TAB — Add to Cart активен (индекс 1)
               CustomTabBar(selectedIndex: 1, onTap: widget.onTabChange),
 
               SizedBox(height: 2.h),
@@ -123,7 +121,6 @@ class _CartScreenState extends State<CartScreen> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    /// МИНУС — удаляет товар
                                     IconButton(
                                       icon: Icon(
                                         Icons.remove_circle,
@@ -132,7 +129,6 @@ class _CartScreenState extends State<CartScreen> {
                                       ),
                                       onPressed: () => removeItem(item),
                                     ),
-                                    /// ПЛЮС — добавляет в избранное
                                     IconButton(
                                       icon: Icon(
                                         Icons.add_circle,

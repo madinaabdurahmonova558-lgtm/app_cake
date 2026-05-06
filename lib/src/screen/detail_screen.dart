@@ -178,7 +178,6 @@ class _DetailScreenState extends State<DetailScreen> {
                 Expanded(
                   child: GestureDetector(
                     onTap: () {
-                      /// Переходим на следующий товар если он есть
                       if (widget.index! < items.length - 1) {
                         Navigator.push(
                           context,
