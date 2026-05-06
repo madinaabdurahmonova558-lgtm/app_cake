@@ -85,7 +85,6 @@ class _DonutsScreenState extends State<DonutsScreen> {
                 decoration: BoxDecoration(),
                 child: Column(
                   children: [
-                    SizedBox(height: 1),
                     Row(
                       children: [
                         Container(
