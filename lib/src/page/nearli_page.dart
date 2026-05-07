@@ -32,7 +32,6 @@ class NearliPage extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 25),
               const Text("Please select a payment method", style: TextStyle(fontSize: 15),),
               const SizedBox(height: 40),
@@ -46,19 +45,19 @@ class NearliPage extends StatelessWidget {
                 ],
               ),
 
+              const SizedBox(height: 25),
+              const Text("or enter your card details below", style: TextStyle(fontSize: 15),),
+              const SizedBox(height: 25),
+
               const SizedBox(height: 20),
 
               /// INPUTS
               buildField("Name on card"),
               buildField("Card Number"),
               buildField("Sort Code"),
-              Row(
-                children: [
-                  Text('Please select',),
-                ],
-              ),
+             
               Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 150, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 9),
       child: TextField(
         decoration: InputDecoration(
           hintText: 'CVC Number',
