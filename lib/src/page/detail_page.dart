@@ -1,4 +1,8 @@
+import 'package:app_cake/src/screen/cart_screen.dart';
+import 'package:app_cake/src/screen/png_screen.dart';
+import 'package:app_cake/src/widgets/cart_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
   final String title;
@@ -18,24 +22,32 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
   int count = 1;
-  bool isFavorite = false;
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+    final provider = context.watch<CartProvider>();
+
+    final currentItem = Item(
+      name: widget.title,
+      image: widget.image,
+      price: double.tryParse(
+              widget.price.replaceAll('\$', '').replaceAll('€', '').trim()) ??
+          0.0,
+    );
+
+    final isFavorite = provider.isFavorite(currentItem);
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [
-            /// 🔝 TOP BAR
             Padding(
               padding: EdgeInsets.symmetric(horizontal: width * 0.04),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  /// BACK
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
@@ -46,18 +58,12 @@ class _DetailPageState extends State<DetailPage> {
                       icon: const Icon(Icons.arrow_back),
                     ),
                   ),
-
-                  /// ❤️ FAVORITE
                   GestureDetector(
                     onTap: () {
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
+                      provider.toggleFavorite(currentItem);
                     },
                     child: Icon(
-                      isFavorite
-                          ? Icons.favorite
-                          : Icons.favorite_border,
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
                       color: Colors.orange,
                     ),
                   ),
@@ -65,7 +71,6 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
 
-            /// 🖼 IMAGE
             Expanded(
               child: Padding(
                 padding: EdgeInsets.all(width * 0.05),
@@ -73,19 +78,15 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
 
-            /// 📦 CONTENT
             Container(
               padding: EdgeInsets.all(width * 0.05),
               decoration: const BoxDecoration(
                 color: Color(0xFFF5F5F5),
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(30),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// TITLE + COUNTER
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -98,8 +99,6 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                         ),
                       ),
-
-                      /// 🔢 COUNTER
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 6),
@@ -115,12 +114,9 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         child: Row(
                           children: [
-                            /// ➖
                             GestureDetector(
                               onTap: () {
-                                if (count > 1) {
-                                  setState(() => count--);
-                                }
+                                if (count > 1) setState(() => count--);
                               },
                               child: Container(
                                 padding: const EdgeInsets.all(6),
@@ -128,12 +124,9 @@ class _DetailPageState extends State<DetailPage> {
                                   color: Colors.grey[300],
                                   shape: BoxShape.circle,
                                 ),
-                                child:
-                                    const Icon(Icons.remove, size: 18),
+                                child: const Icon(Icons.remove, size: 18),
                               ),
                             ),
-
-                            /// COUNT
                             Padding(
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 12),
@@ -143,23 +136,16 @@ class _DetailPageState extends State<DetailPage> {
                                     fontWeight: FontWeight.bold),
                               ),
                             ),
-
-                            /// ➕
                             GestureDetector(
-                              onTap: () {
-                                setState(() => count++);
-                              },
+                              onTap: () => setState(() => count++),
                               child: Container(
                                 padding: const EdgeInsets.all(6),
                                 decoration: const BoxDecoration(
                                   color: Colors.orange,
                                   shape: BoxShape.circle,
                                 ),
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 18,
-                                ),
+                                child: const Icon(Icons.add,
+                                    color: Colors.white, size: 18),
                               ),
                             ),
                           ],
@@ -169,19 +155,14 @@ class _DetailPageState extends State<DetailPage> {
                   ),
 
                   SizedBox(height: width * 0.02),
-
-                  /// ⭐ RATING
                   const StarRating(),
-
                   SizedBox(height: width * 0.04),
 
-                  /// DESCRIPTION
                   const Text(
                     "Description",
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-
                   const Text(
                     "Indulge in the ultimate chocolate experience with this Chocolate Ice Cake. "
                     "This dessert features layers of rich, creamy chocolate ice cream encased in velvety chocolate cake.\n\n"
@@ -190,7 +171,6 @@ class _DetailPageState extends State<DetailPage> {
 
                   SizedBox(height: width * 0.05),
 
-                  /// PRICE
                   Text(
                     "Price ${widget.price}",
                     style: const TextStyle(
@@ -199,7 +179,6 @@ class _DetailPageState extends State<DetailPage> {
 
                   SizedBox(height: width * 0.05),
 
-                  /// BUTTONS
                   Row(
                     children: [
                       Expanded(
@@ -209,23 +188,32 @@ class _DetailPageState extends State<DetailPage> {
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          child: const Center(
-                            child: Text("Order Now"),
-                          ),
+                          child: const Center(child: Text("Order Now")),
                         ),
                       ),
                       SizedBox(width: width * 0.04),
+
+                      // ADD TO CART — открывает PngScreen сразу на вкладке Cart (index=1)
                       Expanded(
-                        child: Container(
-                          padding: EdgeInsets.all(width * 0.04),
-                          decoration: BoxDecoration(
-                            color: Colors.orange,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: const Center(
-                            child: Text(
-                              "Add to Cart",
-                              style: TextStyle(color: Colors.white),
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const PngScreen(initialIndex: 1),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadius.circular(25)),
+                            padding: EdgeInsets.all(width * 0.04),
+                            child: const Center(
+                              child: Text(
+                                "Add to Cart",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ),
                         ),
@@ -242,7 +230,6 @@ class _DetailPageState extends State<DetailPage> {
   }
 }
 
-/// ⭐ RATING WIDGET
 class StarRating extends StatefulWidget {
   final double size;
 
@@ -260,11 +247,7 @@ class _StarRatingState extends State<StarRating> {
     return Row(
       children: List.generate(5, (index) {
         return GestureDetector(
-          onTap: () {
-            setState(() {
-              rating = index + 1;
-            });
-          },
+          onTap: () => setState(() => rating = index + 1),
           child: Icon(
             index < rating ? Icons.star : Icons.star_border,
             color: Colors.amber,

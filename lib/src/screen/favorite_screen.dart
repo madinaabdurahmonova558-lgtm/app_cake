@@ -28,50 +28,71 @@ class FavoriteScreen extends StatelessWidget {
             children: [
               SizedBox(height: 1.h),
 
-              Text(
-                "MY FAVORITES",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: CircleAvatar(
+                      radius: 15,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.arrow_back),
+                    ),
+                  ),
+                  SizedBox(width: 105),
+                  Text(
+                    "MY FAVORITES",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                ],
               ),
 
               SizedBox(height: 2.h),
 
-              /// TAB — Saved Items активен (индекс 0)
+              // Таб бар — переключение через PngScreen.onTabChange
               CustomTabBar(selectedIndex: 0, onTap: onTabChange),
 
               SizedBox(height: 2.h),
 
               Expanded(
-                child: ListView.builder(
-                  itemCount: provider.favorites.length,
-                  itemBuilder: (_, i) {
-                    final item = provider.favorites[i];
+                child: provider.favorites.isEmpty
+                    ? Center(
+                        child: Text(
+                          "Избранное пусто",
+                          style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: provider.favorites.length,
+                        itemBuilder: (_, i) {
+                          final item = provider.favorites[i];
 
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 1.h),
-                      padding: EdgeInsets.all(3.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Row(
-                        children: [
-                          Image.asset(item.image, height: 6.h),
-                          SizedBox(width: 3.w),
-                          Expanded(
-                            child: Text(
-                              item.name,
-                              style: TextStyle(fontSize: 14.sp),
+                          return Container(
+                            margin: EdgeInsets.only(bottom: 1.h),
+                            padding: EdgeInsets.all(3.w),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15),
                             ),
-                          ),
-                          Icon(Icons.bookmark, color: Colors.orange, size: 18.sp),
-                        ],
+                            child: Row(
+                              children: [
+                                Image.asset(item.image, height: 6.h),
+                                SizedBox(width: 3.w),
+                                Expanded(
+                                  child: Text(
+                                    item.name,
+                                    style: TextStyle(fontSize: 14.sp),
+                                  ),
+                                ),
+                                Icon(Icons.bookmark,
+                                    color: Colors.orange, size: 18.sp),
+                              ],
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
               ),
             ],
           ),

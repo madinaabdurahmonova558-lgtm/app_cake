@@ -1,3 +1,6 @@
+import 'package:app_cake/src/screen/account_screen.dart';
+import 'package:app_cake/src/screen/dounts_screen.dart';
+import 'package:app_cake/src/screen/png_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'detail_page.dart';
@@ -11,6 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int selectedCategory = 0;
+  int currentIndex = 0;
 
   final TextEditingController searchController = TextEditingController();
 
@@ -28,8 +32,27 @@ class _HomePageState extends State<HomePage> {
     ["Black Forest Cake", "\$13.99", "assets/images/3.png"],
   ];
 
-  List<List<String>> donuts = [];
-  List<List<String>> cookies = [];
+  List<List<String>> donuts = [
+    ["Sprinkle Berry Donut", "\$2.49", "assets/images/p1.png"],
+    ["Choco Bliss Donut", "\$3.49", "assets/images/p2.png"],
+    ["Oreo Crunch Donut", "\$5.29", "assets/images/p3.png"],
+    ["Muffin Chocolate Donuts", "\$5.49", "assets/images/p4.png"],
+    ["Double Chocolate Donut", "\$3.09", "assets/images/p5.png"],
+    ["Single Donut", "\$2.00", "assets/images/p6.png"],
+    ["Ferrero", "\$5.00", "assets/images/de.png"],
+    ["Sultry Salted caramel", "\$5.00", "assets/images/pw.png"],
+  ];
+
+  List<List<String>> cookies = [
+    ["Choco Chip Cookies", "\$1.99", "assets/images/er.png"],
+    ["Double Chocolate Cookies", "\$2.19", "assets/images/ty.png"],
+    ["Oatmeal Raisin Cookies", "\$1.79", "assets/images/di.png"],
+    ["Macadamia Nut Cookies", "\$5.49", "assets/images/yh.png"],
+    ["Peanut Butter Cookies", "\$2.19", "assets/images/te.png"],
+    ["Snickerdoodle Cookies", "\$1.90", "assets/images/sd.png"],
+    ["Triple Chocolate Chunk Cookies", "\$2.79", "assets/images/df.png"],
+    ["Red Velvet Cookies", "\$2.49", "assets/images/sp.png"],
+  ];
 
   List<List<String>> filtered = [];
 
@@ -60,12 +83,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+
       body: SafeArea(
         child: Column(
           children: [
             SizedBox(height: 3.h),
 
-            /// HEADER
             ListTile(
               leading: CircleAvatar(
                 radius: 6.w,
@@ -86,15 +109,13 @@ class _HomePageState extends State<HomePage> {
               trailing: Icon(Icons.menu, size: 6.w),
             ),
 
-            /// 🔍 SEARCH + FILTER ICON
             Padding(
               padding: EdgeInsets.all(3.w),
               child: Row(
                 children: [
                   Expanded(
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 3.w),
+                      padding: EdgeInsets.symmetric(horizontal: 3.w),
                       decoration: BoxDecoration(
                         color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(30),
@@ -110,27 +131,20 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-
                   SizedBox(width: 3.w),
-
-                  /// 🔥 КНОПКА КАК НА СКРИНЕ
                   Container(
                     padding: EdgeInsets.all(3.w),
                     decoration: const BoxDecoration(
                       color: Colors.orange,
                       shape: BoxShape.circle,
                     ),
-                    child: Icon(
-                      Icons.tune,
-                      color: Colors.white,
-                      size: 5.w,
-                    ),
+                    child: Icon(Icons.tune,
+                        color: Colors.white, size: 5.w),
                   ),
                 ],
               ),
             ),
 
-            /// CATEGORY
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: List.generate(categories.length, (index) {
@@ -179,7 +193,6 @@ class _HomePageState extends State<HomePage> {
 
             SizedBox(height: 2.h),
 
-            /// GRID
             Expanded(
               child: GridView.builder(
                 padding: EdgeInsets.all(3.w),
@@ -204,11 +217,59 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+
+      /// 🔥 ТОЛЬКО ЭТО ИЗМЕНИЛИ
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: 0, // ✅ ВСЕГДА HOME
+        onTap: (index) {
+          if (index == 0) return;
+
+          if (index == 1) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const DonutsScreen(),
+              ),
+            );
+          } else if (index == 2) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => PngScreen()),
+            );
+          } else if (index == 3) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const AccountScreen()),
+            );
+          }
+        },
+        selectedItemColor: Colors.orange,
+        unselectedItemColor: Colors.grey,
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.storefront),
+            label: "Shop",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.favorite_border),
+            label: "Favorite",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            label: "Account",
+          ),
+        ],
+      ),
     );
   }
 }
 
-/// CARD
 class _card extends StatelessWidget {
   final String title, price, image;
 

@@ -1,3 +1,4 @@
+import 'package:app_cake/src/page/screen_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -32,9 +33,29 @@ class _CartScreenState extends State<CartScreen> {
     Item(name: "Chocolate Ice Cake", image: "assets/images/qe.png", price: 8.99),
   ];
 
+  late List<int> counts;
+  double totalPrice = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    counts = List.generate(items.length, (index) => 1);
+    calculateTotal();
+  }
+
+  void calculateTotal() {
+    totalPrice = 0;
+    for (int i = 0; i < items.length; i++) {
+      totalPrice += items[i].price * counts[i];
+    }
+  }
+
   void removeItem(Item item) {
     setState(() {
+      final i = items.indexOf(item);
+      if (i != -1) counts.removeAt(i);
       items.remove(item);
+      calculateTotal();
     });
   }
 
@@ -56,15 +77,30 @@ class _CartScreenState extends State<CartScreen> {
             children: [
               SizedBox(height: 1.h),
 
-              Text(
-                "MY CART",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.sp,
-                ),
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: CircleAvatar(
+                      radius: 15,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.arrow_back),
+                    ),
+                  ),
+                  SizedBox(width: 105),
+                  Text(
+                    "MY CART",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                ],
               ),
 
               SizedBox(height: 2.h),
+
+              // Таб бар — переключение через PngScreen.onTabChange
               CustomTabBar(selectedIndex: 1, onTap: widget.onTabChange),
 
               SizedBox(height: 2.h),
@@ -118,6 +154,8 @@ class _CartScreenState extends State<CartScreen> {
                                   ),
                                 ),
 
+                                Text("x${counts[i]}"),
+
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -127,7 +165,12 @@ class _CartScreenState extends State<CartScreen> {
                                         color: Colors.orange,
                                         size: 18.sp,
                                       ),
-                                      onPressed: () => removeItem(item),
+                                      onPressed: () {
+                                        setState(() {
+                                          if (counts[i] > 0) counts[i]--;
+                                          calculateTotal();
+                                        });
+                                      },
                                     ),
                                     IconButton(
                                       icon: Icon(
@@ -135,7 +178,12 @@ class _CartScreenState extends State<CartScreen> {
                                         color: Colors.orange,
                                         size: 18.sp,
                                       ),
-                                      onPressed: () => provider.toggleFavorite(item),
+                                      onPressed: () {
+                                        setState(() {
+                                          counts[i]++;
+                                          calculateTotal();
+                                        });
+                                      },
                                     ),
                                   ],
                                 ),
@@ -144,6 +192,50 @@ class _CartScreenState extends State<CartScreen> {
                           );
                         },
                       ),
+              ),
+
+              Container(
+                margin: EdgeInsets.only(top: 2.h),
+                padding: EdgeInsets.all(4.w),
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "\$${totalPrice.toStringAsFixed(2)}",
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                     GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ScreenPage(),));
+                      },
+                       child: Container(
+                        height: 40,
+                        width: 85,
+                        decoration: BoxDecoration(
+                          color: Colors.white, 
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all( // 🔥 mana bu qo‘shiladi
+                           color: Colors.black,
+                           width: 1,
+                         ),
+                        ),
+                         child: Center(
+                           child: Text(
+                            "Next >",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                                               ),
+                         ),
+                       ),
+                     ),
+                  ],
+                ),
               ),
             ],
           ),

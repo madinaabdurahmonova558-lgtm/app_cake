@@ -13,14 +13,16 @@ class CartProvider extends ChangeNotifier {
 
   List<Item> get favorites => _favorites;
 
+  bool isFavorite(Item item) {
+    return _favorites.any((e) => e.name == item.name);
+  }
+
   void toggleFavorite(Item item) {
-    if (_favorites.contains(item)) {
-      _favorites.remove(item);
+    if (isFavorite(item)) {
+      _favorites.removeWhere((e) => e.name == item.name);
     } else {
       _favorites.add(item);
     }
     notifyListeners();
   }
-
-  bool isFavorite(Item item) => _favorites.contains(item);
 }

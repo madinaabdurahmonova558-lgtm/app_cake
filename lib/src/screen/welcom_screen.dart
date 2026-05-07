@@ -1,5 +1,6 @@
 import 'package:app_cake/src/page/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class WelcomScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class WelcomScreen extends StatelessWidget {
             decoration:  BoxDecoration(
               color: Colors.amber,
               image: DecorationImage(
-                image: AssetImage('assets/images/hs.png'),
+                image: AssetImage('assets/images/10.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -26,19 +27,19 @@ class WelcomScreen extends StatelessWidget {
                 Center(
                   child: Text(
                     'CakeCrave',
-                    style: TextStyle(
-                      fontSize: 35.sp,
-                    
+                    style: GoogleFonts.calistoga(
+                      fontSize: 25.sp,
+                    fontWeight: FontWeight.w900
                     ),
                   ),
                 ),
-                SizedBox(height: 5.h),
+                SizedBox(height: 1.h),
                 Center(
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 18.w),
                     child: Text(
                       'Discover a world of delicious cakes, from classic flavors to innovative creations, all in one app.',
-                      style: TextStyle(fontSize: 13.sp, color: Colors.black),
+                      style: TextStyle(fontSize: 16.sp, color: Colors.black),
                       textAlign: TextAlign.center,
                     ),
                   ),

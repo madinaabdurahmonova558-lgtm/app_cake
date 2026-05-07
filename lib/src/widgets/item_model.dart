@@ -3,6 +3,7 @@ class ItemModel {
   final String image;
   final String description;
   final double price;
+  
 
   ItemModel({
     required this.title,

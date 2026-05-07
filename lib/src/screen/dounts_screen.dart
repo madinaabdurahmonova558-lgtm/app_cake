@@ -18,6 +18,28 @@ class _DonutsScreenState extends State<DonutsScreen> {
     ["assets/images/p4.png", "Muffin Chocolate Donuts", "\$5.49"],
     ["assets/images/p5.png", "Double Chocolate Donut", "\$3.09"],
     ["assets/images/p6.png", "Single Donut", "\$2.00"],
+
+    // дубликаты (теперь не ломают Hero)
+    ["assets/images/p1.png", "Sprinkle Berry Donut", "\$2.49"],
+    ["assets/images/p2.png", "Choco Bliss Donut", "\$3.49"],
+    ["assets/images/p3.png", "Oreo Crunch Donut", "\$5.29"],
+    ["assets/images/p4.png", "Muffin Chocolate Donuts", "\$5.49"],
+    [ "assets/images/1.png", "Chocolate Ice Cake", "\$8.99",],
+    ["assets/images/7.png", "Creamy Birthday Cake", "\$7.99", ],
+    ["assets/images/5.png", "Oreo Chocolate Cake", "\$11.99", ],
+    ["assets/images/8.png", "Lava Dream Cake", "\$19.99", ],
+    ["assets/images/6.png", "Wedding Cake", "\$10.99", ],
+    ["assets/images/2.png", "Fudge Cake", "\$9.99", ],
+    ["assets/images/4.png", "Milk Cake", "\$12.99", ],
+    ["assets/images/3.png", "Black Forest Cake", "\$13.99", ],
+    ["assets/images/er.png", "Choco Chip Cookies","\$1.99", ],
+    ["assets/images/ty.png", "Double Chocolate Cookies", "\$2.19", ],
+    ["assets/images/di.png", "Oatmeal Raisin Cookies", "\$1.79", ],
+    ["assets/images/yh.png","Macadamia Nut Cookies", "\$5.49", ],
+    ["assets/images/te.png", "Peanut Butter Cookies", "\$2.19", ],
+    ["assets/images/sd.png", "Snickerdoodle Cookies", "\$1.90", ],
+    ["assets/images/df.png", "Triple Chocolate Chunk Cookies", "\$2.79", ],
+    ["assets/images/sp.png","Red Velvet Cookies", "\$2.49", ],
   ];
 
   List filteredItems = [];
@@ -28,23 +50,26 @@ class _DonutsScreenState extends State<DonutsScreen> {
     filteredItems = items;
   }
 
-  void openDetail(BuildContext context, List item) {
+  void openDetail(BuildContext context, List item, int index) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) =>
-            DonutDetailScreen(image: item[0], title: item[1], price: item[2]),
+        builder: (_) => DonutDetailScreen(
+          image: item[0],
+          title: item[1],
+          price: item[2],
+          tag: item[0] + index.toString(), // 🔥 уникальный tag
+        ),
       ),
     );
   }
 
-  /// 🔍 SEARCH FUNCTION
+  /// 🔍 SEARCH
   void searchDonut(String query) {
     final result = items.where((item) {
       return item[1].toLowerCase().contains(query.toLowerCase());
     }).toList();
 
-    /// 🔥 MATCH NI TEPAGA CHIQARISH
     result.sort((a, b) {
       final aMatch = a[1].toLowerCase().startsWith(query.toLowerCase());
       final bMatch = b[1].toLowerCase().startsWith(query.toLowerCase());
@@ -65,36 +90,27 @@ class _DonutsScreenState extends State<DonutsScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            /// TITLE
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
-              child: Row(
-                children: [
-                  Text(
-                    "Donuts Screen",
-                    style: TextStyle(color: Colors.white, fontSize: 16.sp),
-                  ),
-                ],
-              ),
-            ),
-
-            /// BODY
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(4.w),
-                decoration: BoxDecoration(),
                 child: Column(
                   children: [
+                    /// SEARCH
                     Row(
                       children: [
-                        Container(
-                          height: 6.h,
-                          width: 6.h,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            height: 6.h,
+                            width: 6.h,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(Icons.arrow_back, size: 18.sp),
                           ),
-                          child: Icon(Icons.arrow_back, size: 18.sp),
                         ),
                         SizedBox(width: 3.w),
                         Expanded(
@@ -108,7 +124,7 @@ class _DonutsScreenState extends State<DonutsScreen> {
                             child: TextField(
                               onChanged: searchDonut,
                               style: const TextStyle(color: Colors.white),
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                 icon: Icon(Icons.search, color: Colors.white),
                                 hintText: "Search",
                                 hintStyle: TextStyle(color: Colors.white70),
@@ -126,7 +142,8 @@ class _DonutsScreenState extends State<DonutsScreen> {
                     Expanded(
                       child: GridView.builder(
                         itemCount: filteredItems.length,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 4.w,
                           mainAxisSpacing: 2.h,
@@ -136,13 +153,14 @@ class _DonutsScreenState extends State<DonutsScreen> {
                           final item = filteredItems[index];
 
                           return GestureDetector(
-                            onTap: () => openDetail(context, item),
+                            onTap: () =>
+                                openDetail(context, item, index),
                             child: Container(
                               padding: EdgeInsets.all(3.w),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(6.w),
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black12,
                                     blurRadius: 6,
@@ -151,19 +169,20 @@ class _DonutsScreenState extends State<DonutsScreen> {
                                 ],
                               ),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.start,
                                 children: [
-                                  /// IMAGE
+                                  /// 🔥 HERO FIX
                                   Expanded(
                                     child: Hero(
-                                      tag: item[0],
+                                      tag: item[0] +
+                                          index.toString(), // ✅ уникально
                                       child: Image.asset(item[0]),
                                     ),
                                   ),
 
                                   SizedBox(height: 1.h),
 
-                                  /// TITLE
                                   Text(
                                     item[1],
                                     style: TextStyle(
@@ -174,21 +193,20 @@ class _DonutsScreenState extends State<DonutsScreen> {
 
                                   SizedBox(height: 1.h),
 
-                                  /// PRICE + PLUS
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
                                         item[2],
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                           color: Colors.orange,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-
                                       GestureDetector(
-                                        onTap: () => openDetail(context, item),
+                                        onTap: () =>
+                                            openDetail(context, item, index),
                                         child: Container(
                                           height: 4.5.h,
                                           width: 4.5.h,
